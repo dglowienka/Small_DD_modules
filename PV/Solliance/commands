@@ -1,0 +1,26 @@
+%IV to dat files
+for d in */*fast*.IV; do (echo "$d" && python ~/Documents/python/Eindhoven/dat_IV_fast.py $d); done
+
+% PV calculate from hysteresis dat files
+for d in */*fast*.dat; do (echo "$d" && python3 ~/Documents/python/Eindhoven/PV_params_hyst.py $d); done
+
+% PV calculate from max and illumination dat files
+for d in */*ill*.dat; do (echo "$d" && python3 ~/Documents/python/Eindhoven/PV_params_ill.py $d); done
+
+% get cell no 4 results
+for d in */*_PV.dat; do (grep -A 3 -B 1 'Cell no 4' $d); done > DEF01x_cell4.dat
+
+$ get fast 2LS only
+
+for d in */*ill*_PV.dat; do (grep -A 3 -B 1 'Cell' $d); done > REVERSED_illumination.dat
+for d in */*fast_2LS*_PV.dat; do (grep -A 3 -B 1 'REV' $d); done > REVERSED_fast_2LS_PV.dat
+for d in */*fast_2LS*_PV.dat; do (grep -A 3 -B 1 'FORWARD' $d); done > FORWARD_fast_2LS_PV.dat
+for d in */*fast_noLS*_PV.dat; do (grep -A 3 -B 1 'REV' $d); done > REVERSED_fast_noLS_PV.dat
+for d in */*fast_noLS*_PV.dat; do (grep -A 3 -B 1 'FORWARD' $d); done > FORWARD_fast_noLS_PV.dat
+for d in */*max_noLS*_PV.dat; do (grep -A 3 -B 1 'REV' $d); done > REVERSED_max_noLS_PV.dat
+
+
+for d in *.dat; do (grep -F '.' $d | grep -v 'dat' > processed_$d); done
+
+%remove all files with PV
+for d in */; do (find . -name "*_PV.dat" -type f -delete); done
